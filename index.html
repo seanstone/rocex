@@ -496,22 +496,37 @@
                     let img = new Image();
                     img.src = "data:image/svg+xml;base64," + btoa(unescape(encodeURIComponent(svgData)));
                     img.onload = () => {
-                        let canvas = document.createElement("canvas");
-                        canvas.width = maxWidth;
-                        canvas.height = maxHeight;
-                        canvas.style.width = maxWidth;
-                        canvas.style.height = maxHeight;
-                        canvas.getContext("2d").drawImage(img, 0, 0, maxWidth, maxHeight);
+                        let background = new Image();
+                        background.src = "TaiwanGrungeFlag.jpg";
+                        background.onload = () => {
+                            let canvas = document.createElement("canvas");
+                            canvas.width = maxWidth;
+                            canvas.height = maxHeight;
+                            canvas.style.width = maxWidth;
+                            canvas.style.height = maxHeight;
+                            const bgWidth = 1298;
+                            const bgHeight = 876;
+                            const ctx = canvas.getContext("2d");
+                            ctx.beginPath();
+                            ctx.rect(0, 0, maxWidth, maxHeight);
+                            ctx.fillStyle = "white";
+                            ctx.fill();
+                            ctx.save();
+                            ctx.globalAlpha = 0.45;
+                            ctx.drawImage(background, bgWidth*0.1, bgHeight*0.1, maxWidth*0.8, maxHeight*0.8, 0, 0, maxWidth, maxHeight);
+                            ctx.restore();
+                            ctx.drawImage(img, 0, 0, maxWidth, maxHeight);
+                            
+                            let dlLink = document.createElement('a');
+                            dlLink.style.display = "none";
+                            dlLink.download = "rocEX";
+                            dlLink.href = canvas.toDataURL("image/png");
+                            dlLink.dataset.downloadurl = ["image/png", dlLink.download, dlLink.href].join(':');
 
-                        let dlLink = document.createElement('a');
-                        dlLink.style.display = "none";
-                        dlLink.download = "rocEX";
-                        dlLink.href = canvas.toDataURL("image/png");
-                        dlLink.dataset.downloadurl = ["image/png", dlLink.download, dlLink.href].join(':');
-
-                        document.body.appendChild(dlLink);
-                        dlLink.click();
-                        document.body.removeChild(dlLink);
+                            document.body.appendChild(dlLink);
+                            dlLink.click();
+                            document.body.removeChild(dlLink);
+                        }
                     }
                 }
 
