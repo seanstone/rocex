@@ -76,7 +76,7 @@
                     "廣東省": [35, -30],
                     "江西省": [-7, -5],
                     "福建省": [-3, 0],
-                    "台灣省": [20, 0],
+                    "台灣省": [35, -3],
                     "河南省": [0, 12],
                     "江蘇省": [10, -5],
                     "山東省": [-15, 8],
@@ -90,40 +90,72 @@
                     "遼寧省": [3, -5],
                     "黑龍江省": [25, 20],
                     "合江省": [0, 7],
-                    "遼北省": [-15, -25]
+                    "遼北省": [-15, -25],
+                    "安徽省": [3, 8],
+                    "哈爾濱市": [0, 15],
+                    "瀋陽市": [0, -15],
+                    "大連市": [20, 10],
+                    "北平市": [0, -10],
+                    "天津市": [27, 1],
+                    "青島市": [20, 10],
+                    "上海市": [23, 2],
+                    "南京市": [-27, -7],
+                    "漢口市": [0, 15],
+                    "西安市": [0, 15],
+                    "重慶市": [27, 0],
+                    "廣州市": [27, 0],
+                    "香港市": [20, 15],
+                    "澳門市": [-15, 13],
+                    "桃園市": [-24, -4],
+                    "台中市": [-30, 0],
+                    "台南市": [-27, 3],
+                    "高雄市": [-23, 18],
+                    "新北市": [30, 5],
+                    "台北市": [2, -12]
                  };
                 for (let path of roc.querySelectorAll("path")) {
                     const label = path.getAttribute("inkscape:label");
                     const type = label.slice(-1);
                     if (type == "省" || type == "區" || type == "方" || type == "市") {
                         path.name = label;
-                        if (type == "省" || type == "區" || type == "方") {
-                            const bbox = path.getBBox();
-                            let text = document.createElementNS("http://www.w3.org/2000/svg", "text");
-                            const offset = labelOffset[path.name] ?? [0, 0];
-                            text.setAttributeNS(null, "x", bbox.x + bbox.width / 2 + offset[0]);     
-                            text.setAttributeNS(null, "y", bbox.y  + bbox.height / 2 + offset[1]); 
-                            text.setAttributeNS(null, "font-size", "16");
-                            text.setAttributeNS(null, "text-anchor", "middle");
-                            text.setAttributeNS(null, "dominant-baseline", "middle");
-                            let textNode = document.createTextNode(path.name);
-                            text.appendChild(textNode);
-                            roc.appendChild(text);
-                        }
                         provinces.push(path);
                     }
                 }
                 for (const province of provinces) {
+                    const type = province.name.slice(-1);
                     province.style.fill = "white";
+                    if (type == "市") province.style.strokeWidth = 0.8;
+
+                    const bbox = province.getBBox();
+                    let text = document.createElementNS("http://www.w3.org/2000/svg", "text");
+                    const offset = labelOffset[province.name] ?? [0, 0];
+                    text.setAttributeNS(null, "x", bbox.x + bbox.width / 2 + offset[0]);     
+                    text.setAttributeNS(null, "y", bbox.y  + bbox.height / 2 + offset[1]); 
+                    if (type == "市") {
+                        text.setAttributeNS(null, "font-size", "12");
+                        text.setAttributeNS(null, "font-weight", "bold");
+                    } else {
+                        text.setAttributeNS(null, "font-size", "16");
+                    }
+                    text.setAttributeNS(null, "text-anchor", "middle");
+                    text.setAttributeNS(null, "dominant-baseline", "middle");
+                    let textNode = document.createTextNode(province.name);
+                    text.appendChild(textNode);
+                    roc.appendChild(text);
+
                     province.onmouseover = () => {
                         console.log(province.name);
                         document.getElementById("province-name").innerText = province.name;
-                        province.style.strokeWidth = 2.5;
+                        const type = province.name.slice(-1);
+                        if (type == "市") province.style.strokeWidth = 3;
+                        else province.style.strokeWidth = 2.5;
                     }
                     province.onmouseout = () => {
                         console.log("Leave " + province.name);
                         document.getElementById("province-name").innerText = "";
-                        province.style.strokeWidth = 0.2;
+                        const type = province.name.slice(-1);
+                        if (type == "市") province.style.strokeWidth = 0.8;
+                        else province.style.strokeWidth = 0.2;
                     }
                 }
             });
