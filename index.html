@@ -258,6 +258,7 @@
                         else province.style.strokeWidth = 0.2;
                         province.style.stroke = "black";
                     }
+                    province.level = 0;
                     province.onclick = event => {
                         let menuProvince = document.querySelector("#menu-province");
                         menuProvince.innerText = province.name;
@@ -268,26 +269,38 @@
                         document.querySelector("#level-0").onclick = () => {
                             province.level = 0;
                             province.style.fill = "white";
+                            menu.classList.add("hide");
+                            updateLevel();
                         };
                         document.querySelector("#level-1").onclick = () => {
                             province.level = 1;
                             province.style.fill = "#3598db";
+                            menu.classList.add("hide");
+                            updateLevel();
                         };
                         document.querySelector("#level-2").onclick = () => {
                             province.level = 2;
                             province.style.fill = "#30cc70";
+                            menu.classList.add("hide");
+                            updateLevel();
                         };
                         document.querySelector("#level-3").onclick = () => {
                             province.level = 3;
                             province.style.fill = "#f3c218";
+                            menu.classList.add("hide");
+                            updateLevel();
                         };
                         document.querySelector("#level-4").onclick = () => {
                             province.level = 4;
                             province.style.fill = "#d58337";
+                            menu.classList.add("hide");
+                            updateLevel();
                         };
                         document.querySelector("#level-5").onclick = () => {
                             province.level = 5;
                             province.style.fill = "#e84c3d";
+                            menu.classList.add("hide");
+                            updateLevel();
                         };
                         menu.classList.remove("hide");
                         event.stopPropagation();
@@ -304,13 +317,21 @@
                     position: [10, 130],
                     alignMiddle: false,
                 }));
-                roc.appendChild(createText({
+                var levelLabel = createText({
                     fontSize: "36",
                     fontWeight: "400",
                     text: "制省等級 0",
                     position: [10, 180],
                     alignMiddle: false,
-                }));
+                });
+                roc.appendChild(levelLabel);
+
+                function updateLevel()
+                {
+                    let level = 0;
+                    for (const province of provinces) level += province.level;
+                    levelLabel.textContent = `制省等級 ${level}`;
+                }
 
                 const maxWidth = 1109.739;
                 const maxHeight = 879.69611;
