@@ -49,8 +49,6 @@
                 }
             }
         </style>
-
-        <script src="https://cdn.jsdelivr.net/npm/path-data-polyfill@1.0.3/path-data-polyfill.js"></script>
     </head>
 
     <body>
@@ -73,6 +71,7 @@
 
             const rocObj = document.querySelector("#roc-obj");
             rocObj.addEventListener("load", () => {
+                const svg = rocObj.contentDocument.querySelector('svg');
                 const roc = rocObj.contentDocument.querySelector(':scope > [*|label="中華民國"]');
                 const labelOffset = {
                     "新疆省": [40, 30],
@@ -158,8 +157,7 @@
                     province.onmouseover = () => {
                         document.getElementById("province-name").innerText = province.name;
                         const type = province.name.slice(-1);
-                        if (type == "市") province.style.strokeWidth = 3;
-                        else province.style.strokeWidth = 2.5;
+                        province.style.strokeWidth = 1.5;
                     }
                     province.onmouseout = () => {
                         document.getElementById("province-name").innerText = "";
@@ -168,6 +166,38 @@
                         else province.style.strokeWidth = 0.2;
                     }
                 }
+
+                const maxWidth = 1109.739;
+                const maxHeight = 879.69611;
+                var width = maxWidth;
+                var height = maxHeight;
+                var pt = svg.createSVGPoint();
+                svg.addEventListener("wheel", event => {
+                    pt.x = event.clientX; pt.y = event.clientY;
+                    const cursor = pt.matrixTransform(svg.getScreenCTM().inverse());
+                    console.info(event);
+                    if (event.deltaY > 0) {
+                        width *= 1.1;
+                        height *= 1.1;
+                        if (width > maxWidth) width = maxWidth;
+                        if (height > maxHeight) height = maxHeight;
+                    }
+                    if (event.deltaY < 0) {
+                        width /= 1.1;
+                        height /= 1.1;
+                        if (width < 100) width = 100;
+                        if (height < 100) height = 100;
+                    }
+                    let minX = cursor.x - width/2;
+                    let minY = cursor.y - height/2;
+                    const maxX = minX + width;
+                    const maxY = minY + height;
+                    if (minX < 0) minX = 0;
+                    if (minY < 0) minY = 0;
+                    if (maxX > maxWidth) minX = maxWidth - width;
+                    if (maxY > maxHeight) minY = maxHeight - height;
+                    svg.setAttribute("viewBox", `${minX} ${minY} ${width} ${height}`); 
+                });
             });
         </script>
     </body>
