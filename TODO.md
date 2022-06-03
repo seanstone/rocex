@@ -4,3 +4,4 @@
 * Share to FB
 * Add readme
 * Add license
+* Add legend
