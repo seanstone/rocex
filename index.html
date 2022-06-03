@@ -81,17 +81,18 @@
                     "江蘇省": [10, -5],
                     "山東省": [-15, 8],
                     "河北省": [-15, -10],
-                    "察哈爾省": [-10, 0],
+                    "察哈爾省": [-15, 0],
                     "熱河省": [0, 5],
-                    "安東省": [10, -20],
+                    "安東省": [8, -25],
                     "松江省": [15, -5],
                     "興安省": [10, 20],
                     "嫩江省": [-10, 7],
-                    "遼寧省": [3, -5],
-                    "黑龍江省": [25, 20],
+                    "遼寧省": [3, -8],
+                    "黑龍江省": [25, 15],
                     "合江省": [0, 7],
                     "遼北省": [-15, -25],
                     "安徽省": [3, 8],
+                    "吉林省": [5, 5],
                     "哈爾濱市": [0, 15],
                     "瀋陽市": [0, -15],
                     "大連市": [20, 10],
@@ -111,7 +112,7 @@
                     "台南市": [-27, 3],
                     "高雄市": [-23, 18],
                     "新北市": [30, 5],
-                    "台北市": [2, -12]
+                    "台北市": [2, -12],
                  };
                 for (let path of roc.querySelectorAll("path")) {
                     const label = path.getAttribute("inkscape:label");
@@ -132,11 +133,13 @@
                     text.setAttributeNS(null, "x", bbox.x + bbox.width / 2 + offset[0]);     
                     text.setAttributeNS(null, "y", bbox.y  + bbox.height / 2 + offset[1]); 
                     if (type == "市") {
-                        text.setAttributeNS(null, "font-size", "12");
-                        text.setAttributeNS(null, "font-weight", "bold");
+                        text.setAttributeNS(null, "font-size", "13");
+                        text.setAttributeNS(null, "font-weight", "500");
                     } else {
                         text.setAttributeNS(null, "font-size", "16");
+                        text.setAttributeNS(null, "font-weight", "100");
                     }
+                    text.setAttributeNS(null, "font-family", "微軟雅黑體, Microsoft YaHei, 微軟正黑體, Microsoft JhengHei, sans-serif");
                     text.setAttributeNS(null, "text-anchor", "middle");
                     text.setAttributeNS(null, "dominant-baseline", "middle");
                     let textNode = document.createTextNode(province.name);
@@ -144,14 +147,12 @@
                     roc.appendChild(text);
 
                     province.onmouseover = () => {
-                        console.log(province.name);
                         document.getElementById("province-name").innerText = province.name;
                         const type = province.name.slice(-1);
                         if (type == "市") province.style.strokeWidth = 3;
                         else province.style.strokeWidth = 2.5;
                     }
                     province.onmouseout = () => {
-                        console.log("Leave " + province.name);
                         document.getElementById("province-name").innerText = "";
                         const type = province.name.slice(-1);
                         if (type == "市") province.style.strokeWidth = 0.8;
