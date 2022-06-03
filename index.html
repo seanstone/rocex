@@ -463,7 +463,7 @@
 
                 var name = "";
                 document.getElementById("name-button").onclick = () => {
-                    name = prompt("請輸入您想要顯示的名字：", name);
+                    name = prompt("請輸入您想要顯示的名字：", name ?? "");
                     if (name) {
                         nameLabel.textContent = `${name}的`;
                     } else {
