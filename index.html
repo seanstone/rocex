@@ -42,11 +42,84 @@
                     width: 100%;
                 }
             }
+
+            #menu {
+                position: absolute;
+                background: #fff;
+                border: 1.5px solid #999;
+                border-radius: 10px;
+                max-width: 200px;
+                -webkit-transition: opacity .3s;
+                transition: opacity .3s;
+                opacity: 0;
+                display: none;
+                font-family: "微軟雅黑體", "Microsoft YaHei", "微軟正黑體", "Microsoft JhengHei", "sans-serif";
+            }
+
+            #menu-title {
+                background: #dddddd;
+                padding: 4px 1em;
+            }
+
+            #menu-province {
+                font-weight: 600;
+                margin-left: 2px;
+            }
+
+            .label {
+                background: #eeeeee;
+                font-weight: 400;
+                padding: 4px 1em;
+                cursor: pointer;
+                display: block;
+                -webkit-transition: background .2s;
+                transition: background .2s;
+                -webkit-transition: color .2s;
+                transition: color .2s;
+            }
+
+            .red:hover {
+                background-color: #e84c3d;
+                color: white;
+            }
+            .orange:hover {
+                background-color: #d58337;
+                color: white;
+            }
+            .yellow:hover {
+                background-color: #f3c218;
+                /* color: white; */
+            }
+            .green:hover {
+                background-color: #30cc70;
+                color: white;
+            }
+            .blue:hover {
+                background-color: #3598db;
+                color: white;
+            }
+            .white:hover {
+                background-color: #cccccc;
+                /* color: white; */
+            }
         </style>
     </head>
 
     <body>
         <div id="roc-box"><object id="roc-obj" data="roc.svg"></object></div>
+        <div id="menu">
+            <div id="menu-title">
+                @<span id="menu-province"></span>
+            </div>
+            <div class="spots"></div>
+                <label class="label red" id="宮城-5" data-value="5">住居（居住過）</label>
+                <label class="label orange" id="宮城-4" data-value="4">宿泊（住宿過）</label>
+                <label class="label yellow" id="宮城-3" data-value="3">訪問（遊玩過）</label>
+                <label class="label green" id="宮城-2" data-value="2">接地（休息、換車等）</label>
+                <label class="label blue" id="宮城-1" data-value="1">通過（路過）</label>
+                <label class="label white" id="宮城-0" data-value="0">沒去過</label>
+            </div>
+        </div>
         <script>
             function createText(options)
             {
@@ -153,6 +226,7 @@
                     textOptions.text = province.name;
                     roc.appendChild(createText(textOptions));
 
+                    var currentProvince;
                     var currentProvinceText = createText({
                         fontSize: "28",
                         fontWeight: "300",
@@ -162,14 +236,16 @@
                         fill: "blue",
                     });
                     roc.appendChild(currentProvinceText);
-                    province.onmouseover = () => {
+                    province.onmouseover = event => {
+                        currentProvince = province.name;
                         currentProvinceText.textContent = province.name;
                         const type = province.name.slice(-1);
                         province.style.strokeWidth = 1;
                         if (province.name == "香港市" || province.name == "澳門市") province.style.strokeWidth = 0.5;
                         province.style.stroke = "blue";
                     }
-                    province.onmouseout = () => {
+                    province.onmouseout = event => {
+                        currentProvince = null;
                         currentProvinceText.textContent = "";
                         const type = province.name.slice(-1);
                         if (type == "市") province.style.strokeWidth = 0.8;
@@ -177,11 +253,22 @@
                         else province.style.strokeWidth = 0.2;
                         province.style.stroke = "black";
                     }
-                    province.onclick = () => {
-                        console.log(province.name);
+                    province.onclick = event => {
+                        let menu = document.querySelector("#menu");
+                        menu.style.left = event.clientX + "px";
+                        menu.style.top = event.clientY + "px";
+                        menu.style.display = "block";
+                        menu.style.opacity = 1;
+                        let menuProvince = document.querySelector("#menu-province");
+                        menuProvince.innerText = province.name;
+                        event.stopPropagation();
                     }
                 }
 
+                svg.onclick = event => {
+                    menu.style.opacity = 0;
+                    menu.style.display = "none";
+                }
                 roc.appendChild(createText({
                     fontSize: "36",
                     fontWeight: "400",
