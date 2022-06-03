@@ -63,6 +63,7 @@
                 text.setAttributeNS(null, "font-size", options.fontSize);
                 text.setAttributeNS(null, "font-weight", options.fontWeight);
                 text.setAttributeNS(null, "font-family", "微軟雅黑體, Microsoft YaHei, 微軟正黑體, Microsoft JhengHei, sans-serif");
+                if (options.fill) text.setAttributeNS(null, "fill", options.fill);
                 if (options.alignMiddle) {
                     text.setAttributeNS(null, "text-anchor", "middle");
                     text.setAttributeNS(null, "dominant-baseline", "middle");
@@ -142,6 +143,7 @@
                     const type = province.name.slice(-1);
                     province.style.fill = "white";
                     if (type == "市") province.style.strokeWidth = 0.8;
+                    if (province.name == "香港市" || province.name == "澳門市") province.style.strokeWidth = 0.3;
 
                     let textOptions = {};
                     const bbox = province.getBBox();
@@ -158,16 +160,29 @@
                     textOptions.text = province.name;
                     roc.appendChild(createText(textOptions));
 
+                    var currentProvinceText = createText({
+                        fontSize: "28",
+                        fontWeight: "300",
+                        text: "",
+                        position: [950, 885],
+                        alignMiddle: true,
+                        fill: "blue",
+                    });
+                    roc.appendChild(currentProvinceText);
                     province.onmouseover = () => {
-                        //document.getElementById("province-name").innerText = province.name;
+                        currentProvinceText.textContent = province.name;
                         const type = province.name.slice(-1);
-                        province.style.strokeWidth = 1.5;
+                        province.style.strokeWidth = 1;
+                        if (province.name == "香港市" || province.name == "澳門市") province.style.strokeWidth = 0.5;
+                        province.style.stroke = "blue";
                     }
                     province.onmouseout = () => {
-                        //document.getElementById("province-name").innerText = "";
+                        currentProvinceText.textContent = "";
                         const type = province.name.slice(-1);
                         if (type == "市") province.style.strokeWidth = 0.8;
+                        if (province.name == "香港市" || province.name == "澳門市") province.style.strokeWidth = 0.3;
                         else province.style.strokeWidth = 0.2;
+                        province.style.stroke = "black";
                     }
                 }
 
