@@ -63,8 +63,10 @@
                 text.setAttributeNS(null, "font-size", options.fontSize);
                 text.setAttributeNS(null, "font-weight", options.fontWeight);
                 text.setAttributeNS(null, "font-family", "微軟雅黑體, Microsoft YaHei, 微軟正黑體, Microsoft JhengHei, sans-serif");
-                text.setAttributeNS(null, "text-anchor", "middle");
-                text.setAttributeNS(null, "dominant-baseline", "middle");
+                if (options.alignMiddle) {
+                    text.setAttributeNS(null, "text-anchor", "middle");
+                    text.setAttributeNS(null, "dominant-baseline", "middle");
+                }
                 text.appendChild(document.createTextNode(options.text));
                 text.style.userSelect = "none";
                 return text;
@@ -152,6 +154,7 @@
                         textOptions.fontSize = "16";
                         textOptions.fontWeight = "100";
                     }
+                    textOptions.alignMiddle = true;
                     textOptions.text = province.name;
                     roc.appendChild(createText(textOptions));
 
@@ -167,6 +170,21 @@
                         else province.style.strokeWidth = 0.2;
                     }
                 }
+
+                roc.appendChild(createText({
+                    fontSize: "36",
+                    fontWeight: "400",
+                    text: "中華民國",
+                    position: [10, 130],
+                    alignMiddle: false,
+                }));
+                roc.appendChild(createText({
+                    fontSize: "36",
+                    fontWeight: "400",
+                    text: "制省等級 0",
+                    position: [10, 180],
+                    alignMiddle: false,
+                }));
 
                 const maxWidth = 1109.739;
                 const maxHeight = 879.69611;
