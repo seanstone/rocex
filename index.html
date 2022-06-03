@@ -17,21 +17,34 @@
             body {
                 background: #b4def7;
                 text-align: center;
+                display: flex;
+            }
+
+            #roc-box {
+                display: inline-block;
+                flex: 1;
             }
 
             #roc-obj {
-                display: inline-block;
+                width: 100%;
+                height: 100%;
+            }
+
+            #province-name {
+                min-width: 150px;
+                margin: auto;
+                font-size: 30px;
             }
 
             @media screen and (min-width: 100vh) {
                 /* The width is greater than the height */
-                #roc-obj {
+                #roc-box {
                     height: 100%;
                 }
             }
             @media screen and (max-width: 100vh) {
                 /* The width is smaller than the height */
-                #roc-obj {
+                #roc-box {
                     width: 100%;
                 }
             }
@@ -39,7 +52,8 @@
     </head>
 
     <body>
-        <object id="roc-obj" data="roc.svg"> </object>
+        <div id="roc-box"><object id="roc-obj" data="roc.svg"></object></div>
+        <div id="province-name"></div>
         <script>
             const rocObj = document.querySelector("#roc-obj");
             rocObj.addEventListener("load", () => {
@@ -57,10 +71,12 @@
                     province.style.fill = "white";
                     province.onmouseover = () => {
                         console.log(province.name);
+                        document.getElementById("province-name").innerText = province.name;
                         province.style.strokeWidth = 2.5;
                     }
                     province.onmouseout = () => {
                         console.log("Leave " + province.name);
+                        // document.getElementById("province-name").innerText = "";
                         province.style.strokeWidth = 0.2;
                     }
                 }
