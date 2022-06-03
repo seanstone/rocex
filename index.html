@@ -49,6 +49,7 @@
                 border: 1.5px solid #999;
                 border-radius: 10px;
                 max-width: 200px;
+                min-width: 200px;
                 -webkit-transition: opacity .3s;
                 transition: opacity .3s;
                 font-family: "微軟雅黑體", "Microsoft YaHei", "微軟正黑體", "Microsoft JhengHei", "sans-serif";
@@ -262,6 +263,9 @@
                         menuProvince.innerText = province.name;
                         menu.style.left = event.clientX + "px";
                         menu.style.top = event.clientY + "px";
+                        console.log()
+                        if (event.clientX + menu.clientWidth > window.innerWidth) menu.style.left = (window.innerWidth - menu.clientWidth) + "px";
+                        if (event.clientY + menu.clientHeight > window.innerHeight) menu.style.top = (window.innerHeight - menu.clientHeight) + "px";
                         menu.classList.remove("hide");
                         event.stopPropagation();
                     }
