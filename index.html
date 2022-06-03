@@ -321,13 +321,30 @@
                 var pt = svg.createSVGPoint();
                 var panning = false;
                 var anchorX = 0; var anchorY = 0;
+                var mousedown = false;
+                svg.onmousedown = event => {
+                    mousedown = true;
+                    setTimeout(() => {
+                        if (mousedown) {
+                            menu.classList.add("hide");
+                            panning = true;
+                            anchorX = event.clientX; anchorY = event.clientY;
+                            svg.style.cursor = "move";
+                        }
+                    }, 300)
+                };
                 svg.oncontextmenu = event => {
+                    menu.classList.add("hide");
                     event.preventDefault();
-                    panning = true;
-                    anchorX = event.clientX; anchorY = event.clientY;
-                    svg.style.cursor = "move";
+                };
+                svg.onkeydown = function(event) {
+                    let isEscape = false;
+                    if ("key" in event) isEscape = (event.key === "Escape" || event.key === "Esc");
+                    else isEscape = (event.keyCode === 27);
+                    if (isEscape) menu.classList.add("hide");
                 };
                 svg.onmouseup = event => {
+                    mousedown = false;
                     panning = false;
                     svg.style.cursor = "auto";
                 };
