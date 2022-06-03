@@ -49,6 +49,8 @@
                 }
             }
         </style>
+
+        <script src="https://cdn.jsdelivr.net/npm/path-data-polyfill@1.0.3/path-data-polyfill.js"></script>
     </head>
 
     <body>
@@ -59,11 +61,55 @@
             rocObj.addEventListener("load", () => {
                 const roc = rocObj.contentDocument.querySelector(':scope > [*|label="中華民國"]');
                 provinces = [];
+                const labelOffset = {
+                    "新疆省": [40, 30],
+                    "西藏地方": [5, -20],
+                    "青海省": [0, -5],
+                    "西康省": [0, -5],
+                    "蒙古地方": [-35, 30],
+                    "寧夏省": [15, -10],
+                    "甘肅省": [-70, -60],
+                    "陝西省": [13, -31],
+                    "貴州省": [5, 5],
+                    "湖南省": [0, -10],
+                    "廣西省": [10, 5],
+                    "廣東省": [35, -30],
+                    "江西省": [-7, -5],
+                    "福建省": [-3, 0],
+                    "台灣省": [20, 0],
+                    "河南省": [0, 12],
+                    "江蘇省": [10, -5],
+                    "山東省": [-15, 8],
+                    "河北省": [-15, -10],
+                    "察哈爾省": [-10, 0],
+                    "熱河省": [0, 5],
+                    "安東省": [10, -20],
+                    "松江省": [15, -5],
+                    "興安省": [10, 20],
+                    "嫩江省": [-10, 7],
+                    "遼寧省": [3, -5],
+                    "黑龍江省": [25, 20],
+                    "合江省": [0, 7],
+                    "遼北省": [-15, -25]
+                 };
                 for (let path of roc.querySelectorAll("path")) {
                     const label = path.getAttribute("inkscape:label");
                     const type = label.slice(-1);
-                    if (type == "省" || type == "市" || type == "區" || type == "方") {
+                    if (type == "省" || type == "區" || type == "方" || type == "市") {
                         path.name = label;
+                        if (type == "省" || type == "區" || type == "方") {
+                            const bbox = path.getBBox();
+                            let text = document.createElementNS("http://www.w3.org/2000/svg", "text");
+                            const offset = labelOffset[path.name] ?? [0, 0];
+                            text.setAttributeNS(null, "x", bbox.x + bbox.width / 2 + offset[0]);     
+                            text.setAttributeNS(null, "y", bbox.y  + bbox.height / 2 + offset[1]); 
+                            text.setAttributeNS(null, "font-size", "16");
+                            text.setAttributeNS(null, "text-anchor", "middle");
+                            text.setAttributeNS(null, "dominant-baseline", "middle");
+                            let textNode = document.createTextNode(path.name);
+                            text.appendChild(textNode);
+                            roc.appendChild(text);
+                        }
                         provinces.push(path);
                     }
                 }
@@ -76,7 +122,7 @@
                     }
                     province.onmouseout = () => {
                         console.log("Leave " + province.name);
-                        // document.getElementById("province-name").innerText = "";
+                        document.getElementById("province-name").innerText = "";
                         province.style.strokeWidth = 0.2;
                     }
                 }
