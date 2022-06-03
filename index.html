@@ -19,19 +19,19 @@
                 text-align: center;
             }
 
-            #roc {
+            #roc-obj {
                 display: inline-block;
             }
 
             @media screen and (min-width: 100vh) {
                 /* The width is greater than the height */
-                #roc {
+                #roc-obj {
                     height: 100%;
                 }
             }
             @media screen and (max-width: 100vh) {
                 /* The width is smaller than the height */
-                #roc {
+                #roc-obj {
                     width: 100%;
                 }
             }
@@ -39,6 +39,25 @@
     </head>
 
     <body>
-        <object id="roc" data="roc.svg"> </object>
+        <object id="roc-obj" data="roc.svg"> </object>
+        <script>
+            const rocObj = document.querySelector("#roc-obj");
+            rocObj.addEventListener("load", () => {
+                const roc = rocObj.contentDocument.querySelector(':scope > [*|label="中華民國"]');
+                provinces = [];
+                for (let path of roc.querySelectorAll("path")) {
+                    const label = path.getAttribute("inkscape:label");
+                    const type = label.slice(-1);
+                    if (type == "省" || type == "市" || type == "區" || type == "方") {
+                        path.name = label;
+                        provinces.push(path);
+                    }
+                }
+                for (const province of provinces) {
+                    console.log(province.name);
+                    province.style.fill = "white";
+                }
+            });
+        </script>
     </body>
 </html>
