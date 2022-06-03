@@ -2,3 +2,4 @@
 * Share to FB
 * Add readme
 * Add legend
+* Save background in image
