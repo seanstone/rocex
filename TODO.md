@@ -1,6 +1,4 @@
-* Attribution
 * South sea islands labels and highlight
 * Share to FB
 * Add readme
-* Add license
 * Add legend
