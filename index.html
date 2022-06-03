@@ -57,10 +57,23 @@
         <div id="roc-box"><object id="roc-obj" data="roc.svg"></object></div>
         <div id="province-name"></div>
         <script>
+            function createText(options)
+            {
+                let text = document.createElementNS("http://www.w3.org/2000/svg", "text");
+                text.setAttributeNS(null, "x", options.position[0]);     
+                text.setAttributeNS(null, "y", options.position[1]); 
+                text.setAttributeNS(null, "font-size", options.fontSize);
+                text.setAttributeNS(null, "font-weight", options.fontWeight);
+                text.setAttributeNS(null, "font-family", "微軟雅黑體, Microsoft YaHei, 微軟正黑體, Microsoft JhengHei, sans-serif");
+                text.setAttributeNS(null, "text-anchor", "middle");
+                text.setAttributeNS(null, "dominant-baseline", "middle");
+                text.appendChild(document.createTextNode(options.text));
+                return text;
+            }
+
             const rocObj = document.querySelector("#roc-obj");
             rocObj.addEventListener("load", () => {
                 const roc = rocObj.contentDocument.querySelector(':scope > [*|label="中華民國"]');
-                provinces = [];
                 const labelOffset = {
                     "新疆省": [40, 30],
                     "西藏地方": [5, -20],
@@ -113,7 +126,8 @@
                     "高雄市": [-23, 18],
                     "新北市": [30, 5],
                     "台北市": [2, -12],
-                 };
+                };
+                var provinces = [];
                 for (let path of roc.querySelectorAll("path")) {
                     const label = path.getAttribute("inkscape:label");
                     const type = label.slice(-1);
@@ -127,24 +141,19 @@
                     province.style.fill = "white";
                     if (type == "市") province.style.strokeWidth = 0.8;
 
+                    let textOptions = {};
                     const bbox = province.getBBox();
-                    let text = document.createElementNS("http://www.w3.org/2000/svg", "text");
                     const offset = labelOffset[province.name] ?? [0, 0];
-                    text.setAttributeNS(null, "x", bbox.x + bbox.width / 2 + offset[0]);     
-                    text.setAttributeNS(null, "y", bbox.y  + bbox.height / 2 + offset[1]); 
+                    textOptions.position = [bbox.x + bbox.width / 2 + offset[0], bbox.y  + bbox.height / 2 + offset[1]];
                     if (type == "市") {
-                        text.setAttributeNS(null, "font-size", "13");
-                        text.setAttributeNS(null, "font-weight", "500");
+                        textOptions.fontSize = "13";
+                        textOptions.fontWeight = "500";
                     } else {
-                        text.setAttributeNS(null, "font-size", "16");
-                        text.setAttributeNS(null, "font-weight", "100");
+                        textOptions.fontSize = "16";
+                        textOptions.fontWeight = "100";
                     }
-                    text.setAttributeNS(null, "font-family", "微軟雅黑體, Microsoft YaHei, 微軟正黑體, Microsoft JhengHei, sans-serif");
-                    text.setAttributeNS(null, "text-anchor", "middle");
-                    text.setAttributeNS(null, "dominant-baseline", "middle");
-                    let textNode = document.createTextNode(province.name);
-                    text.appendChild(textNode);
-                    roc.appendChild(text);
+                    textOptions.text = province.name;
+                    roc.appendChild(createText(textOptions));
 
                     province.onmouseover = () => {
                         document.getElementById("province-name").innerText = province.name;
