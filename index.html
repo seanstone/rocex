@@ -51,9 +51,12 @@
                 max-width: 200px;
                 -webkit-transition: opacity .3s;
                 transition: opacity .3s;
-                opacity: 0;
-                display: none;
                 font-family: "微軟雅黑體", "Microsoft YaHei", "微軟正黑體", "Microsoft JhengHei", "sans-serif";
+            }
+
+            .hide {
+                opacity: 0;
+                pointer-events: none;
             }
 
             #menu-title {
@@ -107,7 +110,7 @@
 
     <body>
         <div id="roc-box"><object id="roc-obj" data="roc.svg"></object></div>
-        <div id="menu">
+        <div id="menu" class="hide">
             <div id="menu-title">
                 @<span id="menu-province"></span>
             </div>
@@ -143,6 +146,7 @@
             rocObj.addEventListener("load", () => {
                 const svg = rocObj.contentDocument.querySelector('svg');
                 const roc = rocObj.contentDocument.querySelector(':scope > [*|label="中華民國"]');
+                var menu = document.querySelector("#menu");
                 const labelOffset = {
                     "新疆省": [40, 30],
                     "西藏地方": [5, -20],
@@ -254,20 +258,17 @@
                         province.style.stroke = "black";
                     }
                     province.onclick = event => {
-                        let menu = document.querySelector("#menu");
-                        menu.style.left = event.clientX + "px";
-                        menu.style.top = event.clientY + "px";
-                        menu.style.display = "block";
-                        menu.style.opacity = 1;
                         let menuProvince = document.querySelector("#menu-province");
                         menuProvince.innerText = province.name;
+                        menu.style.left = event.clientX + "px";
+                        menu.style.top = event.clientY + "px";
+                        menu.classList.remove("hide");
                         event.stopPropagation();
                     }
                 }
 
                 svg.onclick = event => {
-                    menu.style.opacity = 0;
-                    menu.style.display = "none";
+                    menu.classList.add("hide");
                 }
                 roc.appendChild(createText({
                     fontSize: "36",
