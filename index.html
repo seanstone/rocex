@@ -440,6 +440,30 @@
                     }
                     svg.setAttribute("viewBox", `${centerX-width/2} ${centerY-height/2} ${width} ${height}`); 
                 };
+
+                document.getElementById("save-button").onclick = () => {
+                    const svgData = new XMLSerializer().serializeToString(svg);
+                    let img = new Image();
+                    img.src = "data:image/svg+xml;base64," + btoa(unescape(encodeURIComponent(svgData)));
+                    img.onload = () => {
+                        let canvas = document.createElement("canvas");
+                        canvas.width = maxWidth;
+                        canvas.height = maxHeight;
+                        canvas.style.width = maxWidth;
+                        canvas.style.height = maxHeight;
+                        canvas.getContext("2d").drawImage(img, 0, 0, maxWidth, maxHeight);
+
+                        let dlLink = document.createElement('a');
+                        dlLink.style.display = "none";
+                        dlLink.download = "image";
+                        dlLink.href = canvas.toDataURL("image/png");
+                        dlLink.dataset.downloadurl = ["image/png", dlLink.download, dlLink.href].join(':');
+
+                        document.body.appendChild(dlLink);
+                        dlLink.click();
+                        document.body.removeChild(dlLink);
+                    }
+                }
             });
         </script>
     </body>
