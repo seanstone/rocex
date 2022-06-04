@@ -1,7 +1,5 @@
 # 中華民國制省等級
 
-![](TaiwanGrungeFlag.jpg)
-
 ## Attribution
 
 * Reference: [JapanEx / zhung1206](https://zhung.com.tw/japanex)
